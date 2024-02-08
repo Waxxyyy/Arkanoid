@@ -57,7 +57,7 @@ class Ball(pygame.sprite.Sprite):
                        pygame.image.load("ball2.png").convert_alpha(),
                        pygame.image.load("ball3.png").convert_alpha()]
         self.current_image = 0  # Текущее изображение мяча
-        self.original_image = pygame.transform.scale(self.images[self.current_image], (30, 30))  # Изменяем размер оригинального изображения
+        self.original_image = pygame.transform.scale(self.images[self.current_image], (30, 30))
         self.image = self.original_image
         self.rect = self.image.get_rect()
         self.rect.centerx = platform.rect.centerx
@@ -66,7 +66,7 @@ class Ball(pygame.sprite.Sprite):
         self.speed = [0, 0]
         self.platform = platform  # Сохраняем платформу
         self.animation_delay = 0  # Задержка между сменой кадров
-        self.animation_speed = 10  # Скорость анимации (меньше значение - медленнее анимация)
+        self.animation_speed = 10  # Скорость анимации 
 
     def update(self):
         if not self.on_platform:
@@ -104,7 +104,25 @@ class Ball(pygame.sprite.Sprite):
                     score += 1
 
             if len(blocks) == 0:
-                self.restart_level()
+                self.restart_level()  # Добавляем вызов функции перезапуска уровня
+
+    def restart_level(self):  # Вставляем функцию перезапуска уровня в класс Ball
+        global lives, score, in_main_menu
+        global blocks  # Глобальная переменная для блоков
+        print("Restarting level...")
+        lives = 3
+        in_main_menu = False
+
+        # Удаление старых блоков и кнопки
+        blocks.empty()
+        all_sprites.remove(self)
+
+        # Генерация новых блоков
+        for row in range(5):
+            for col in range(11):
+                block = Block(col * 75, row * 30)
+                all_sprites.add(block)
+                blocks.add(block)
 
     def catapult(self):
         if self.on_platform:
